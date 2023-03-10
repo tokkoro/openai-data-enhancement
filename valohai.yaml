@@ -1,0 +1,36 @@
+- step:
+    name: gpt35-turbo-filter
+    image: python:3.10
+    command:
+    - pip install -r requirements.txt
+    - python ./main.py {parameters}
+    parameters:
+    - name: token_limit_per_message
+      default: 800
+      multiple-separator: ','
+      optional: false
+      type: integer
+    - name: max_messages
+      default: 10
+      multiple-separator: ','
+      optional: false
+      type: integer
+    - name: max_tokens
+      default: 10000
+      multiple-separator: ','
+      optional: false
+      type: integer
+    - name: chat_prompt
+      default: 'Give me all questions in following text:
+
+        {body}'
+      multiple-separator: ','
+      optional: false
+      type: string
+    inputs:
+    - name: data_to_clean
+      default: react_hooks_faqs.txt
+      optional: false
+    environment-variables:
+    - name: OPENAI_API_KEY
+      default: ""

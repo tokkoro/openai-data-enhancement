@@ -1,0 +1,3 @@
+openai==0.27.1
+valohai-cli==0.24.0
+valohai-utils==0.3.1
