@@ -6,23 +6,26 @@
     - python ./main.py {parameters}
     parameters:
     - name: token_limit_per_message
+      description: message will be constructed from multiple lines until this limit is exceeded. Estimation of 4 characters per token is used.
       default: 800
       multiple-separator: ','
       optional: false
       type: integer
     - name: max_messages
-      description: 0=unlimited
+      description: 0=unlimited, maximum number of messages to send to OpenAI
       default: 10
       multiple-separator: ','
       optional: false
       type: integer
       min: 0
     - name: max_tokens
+      description: execution will stop after this limit is exceeded
       default: 10000
       multiple-separator: ','
       optional: false
       type: integer
     - name: chat_prompt
+      description: '{body} will be replaced with the message body.'
       default: 'Give me all questions in following text:
 
         {body}'
@@ -31,8 +34,9 @@
       type: string
     inputs:
     - name: data_to_clean
-      default: react_hooks_faqs.txt
+      description: text file that can be split into messages by lines
       optional: false
     environment-variables:
     - name: OPENAI_API_KEY
-      default: ""
+      default: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+      description: 'https://platform.openai.com/account/api-keys'
