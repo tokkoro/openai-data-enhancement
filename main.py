@@ -31,12 +31,14 @@ if "{body}" not in chat_prompt:
     raise ValueError("chat_prompt must contain {body} placeholder")
 message_num = 0
 total_tokens = 0
+line_count = 0
 
 with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
     while message_num < max_messages or max_messages == 0:
         body = ""
         while len(body) / chars_per_token < limit_per_message:
             line = data_to_clean.readline()
+            line_count += 1
             if not line:
                 break
             body += line
@@ -44,7 +46,7 @@ with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
         res = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                # {"role": "system", "content": "You are a helpful assistant."},
+                # {"role": "system", "content": "You are a helpful assistant."}, removed to save tokens
                 {
                     "role": "user",
                     "content": chat_prompt.format(body=body),
@@ -61,6 +63,7 @@ with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
         usage = res["usage"]
         total_tokens += usage["total_tokens"]
         if total_tokens > max_tokens:
+            print("Max tokens reached")
             break
         new_matches_count = matches.count('\n')
         print(f"New matches: {new_matches_count}")
@@ -68,6 +71,10 @@ with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
         message_num += 1
         if not line:
             break
+    else:
+        print("Max messages reached")
+
+print("Total lines read:", line_count)
 
 output_path = valohai.outputs("cleaned_data").path("cleaned_data.txt")
 with open(output_path, "w") as f:
