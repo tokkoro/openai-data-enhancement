@@ -11,10 +11,12 @@
       optional: false
       type: integer
     - name: max_messages
+      description: 0=unlimited
       default: 10
       multiple-separator: ','
       optional: false
       type: integer
+      min: 0
     - name: max_tokens
       default: 10000
       multiple-separator: ','

@@ -33,7 +33,7 @@ message_num = 0
 total_tokens = 0
 
 with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
-    while message_num < max_messages:
+    while message_num < max_messages or max_messages == 0:
         body = ""
         while len(body) / chars_per_token < limit_per_message:
             line = data_to_clean.readline()
