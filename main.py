@@ -47,14 +47,17 @@ with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
                 # {"role": "system", "content": "You are a helpful assistant."},
                 {
                     "role": "user",
-                    # "content": data_to_clean"Write one result per line without numbers at start. Give me a list of questions in following text:\n{body}"
-                    # "content": f"Give me all questions in following text:\n{body}"
                     "content": chat_prompt.format(body=body),
                 }
             ]
         )
 
         matches = res["choices"][0]["message"]["content"]
+        for question in matches.splitlines():
+            if not question:
+                continue
+            result.append(question)
+
         usage = res["usage"]
         total_tokens += usage["total_tokens"]
         if total_tokens > max_tokens:
@@ -62,10 +65,6 @@ with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
         new_matches_count = matches.count('\n')
         print(f"New matches: {new_matches_count}")
 
-        for question in matches.splitlines():
-            if not question:
-                continue
-            result.append(question)
         message_num += 1
         if not line:
             break
