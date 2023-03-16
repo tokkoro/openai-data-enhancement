@@ -58,7 +58,7 @@ with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
         for question in matches.splitlines():
             if not question:
                 continue
-            result.append(question)
+            result.append(question.lstrip('0123456789. '))
 
         usage = res["usage"]
         total_tokens += usage["total_tokens"]
