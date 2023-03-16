@@ -1,3 +1,4 @@
+import csv
 import os
 
 import openai
@@ -46,7 +47,6 @@ with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
         res = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                # {"role": "system", "content": "You are a helpful assistant."}, removed to save tokens
                 {
                     "role": "user",
                     "content": chat_prompt.format(body=body),
@@ -76,9 +76,11 @@ with open(valohai.inputs("data_to_clean").path(), "r") as data_to_clean:
 
 print("Total lines read:", line_count)
 
-output_path = valohai.outputs("cleaned_data").path("cleaned_data.txt")
+output_path = valohai.outputs("cleaned_data").path("cleaned_data.csv")
 with open(output_path, "w") as f:
-    f.write("\n".join(result))
+    csv_writer = csv.writer(f, delimiter=",")
+    for row in result:
+        csv_writer.writerow([row])
 
 logger.log("tokens_used", total_tokens)
 logger.log("num_results", len(result))
