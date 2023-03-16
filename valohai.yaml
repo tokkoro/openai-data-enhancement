@@ -38,5 +38,5 @@
       optional: false
     environment-variables:
     - name: OPENAI_API_KEY
-      default: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+      default: ''
       description: 'https://platform.openai.com/account/api-keys'
